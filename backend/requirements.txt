@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+google-generativeai
+python-multipart
+pdfplumber
+motor
+pydantic
+pydantic-settings
+python-dotenv
+pymongo
+certifi

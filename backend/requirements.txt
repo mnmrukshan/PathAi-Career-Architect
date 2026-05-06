@@ -1,8 +1,9 @@
 fastapi
 uvicorn[standard]
-google-generativeai
+google-genai
 python-multipart
 pdfplumber
+PyMuPDF
 motor
 pydantic
 pydantic-settings

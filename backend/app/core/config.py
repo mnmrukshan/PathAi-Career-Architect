@@ -13,10 +13,10 @@ class Settings(BaseSettings):
 
     # Gemini API
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_MODEL: str = "gemini-flash-latest"
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-pro")
 
     # MongoDB
-    MONGODB_URL: str = os.getenv("MONGODB_URL", "")
+    MONGODB_URL: str = os.getenv("MONGODB_URL", os.getenv("MONGO_URI", ""))
     DATABASE_NAME: str = os.getenv("DATABASE_NAME", "pathai_db")
 
     # Security

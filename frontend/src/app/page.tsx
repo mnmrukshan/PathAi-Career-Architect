@@ -13,7 +13,10 @@ import {
   MessageSquare, 
   BarChart, 
   BrainCircuit,
-  ArrowRight
+  ArrowRight,
+  Globe,
+  Link as LinkIcon,
+  Mail
 } from "lucide-react";
 
 export default function Home() {
@@ -52,16 +55,16 @@ export default function Home() {
             <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-purple-500" />
           </button>
           
-          <Link href="/get-started" className="p-2 rounded-full hover:bg-white/5 transition-colors duration-200">
+          <Link href="/dashboard/settings" className="p-2 rounded-full hover:bg-white/5 transition-colors duration-200">
             <User className="w-4.5 h-4.5 text-gray-400 hover:text-white transition-colors" />
           </Link>
 
           <Link
-            href="/dashboard"
+            href="/login"
             style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9)" }}
             className="hidden sm:inline-flex px-4 py-2 text-xs font-bold tracking-wide text-white rounded-lg hover:shadow-[0_0_20px_rgba(124,58,237,0.3)] hover:brightness-110 transition-all duration-200 select-none cursor-pointer"
           >
-            Go to Dashboard
+            Sign In
           </Link>
         </div>
       </nav>
@@ -101,7 +104,7 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed"
         >
-          Intelligent roadmap generation, resume optimization, and mock interviews to accelerate your career growth. Stop guessing, start executing.
+          Roadmap architecting, career overview, and interview coaching to accelerate your career growth. Stop guessing, start executing.
         </motion.p>
 
         {/* Action Buttons */}
@@ -112,7 +115,7 @@ export default function Home() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 select-none"
         >
           <Link 
-            href="/get-started" 
+            href="/signup" 
             style={{ background: "linear-gradient(135deg, #7c3aed, #4f46e5)", boxShadow: "0 0 25px rgba(124,58,237,0.3)" }}
             className="w-full sm:w-auto px-7 py-3.5 text-white font-bold text-sm rounded-xl tracking-wide hover:brightness-110 active:scale-[0.98] transition-all duration-200 select-none cursor-pointer flex items-center justify-center"
           >
@@ -141,17 +144,11 @@ export default function Home() {
               <Route className="w-5.5 h-5.5 text-purple-400" />
             </div>
             <h3 className="text-xl font-bold tracking-tight text-white group-hover:text-purple-400 transition-colors">
-              Intelligent Roadmap Generation
+              Roadmap Architect
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xl">
-              Our AI analyzes millions of career trajectories to map out the precise skills, roles, and milestones you need to reach your ultimate destination.
+              A consolidated intelligence engine that bridges your career gaps. By analyzing your PDF CV or manual profile entry, it identifies critical skill gaps and architecturally designs a personalized 12-week strategic roadmap to reach your target career goal.
             </p>
-          </div>
-          {/* Tags */}
-          <div className="flex items-center gap-2 pt-2 text-xs select-none">
-            <span className="px-3 py-1 rounded-md bg-white/5 border border-white/5 text-gray-400">Data Science</span>
-            <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
-            <span className="px-3 py-1 rounded-md bg-white/5 border border-white/5 text-gray-400">Machine Learning</span>
           </div>
         </motion.div>
 
@@ -167,10 +164,10 @@ export default function Home() {
               <Sparkles className="w-5.5 h-5.5 text-cyan-400" />
             </div>
             <h3 className="text-xl font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-              Resume Optimization
+              Career Overview
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Surgically align your experience with target roles. The AI parses job descriptions and refines your bullet points for maximum impact and ATS pass-through.
+              Monitor your growth, track saved roadmaps, and analyze your industry readiness through a unified progress dashboard acting as a career cockpit.
             </p>
           </div>
         </motion.div>
@@ -187,10 +184,10 @@ export default function Home() {
               <MessageSquare className="w-5.5 h-5.5 text-indigo-400" />
             </div>
             <h3 className="text-xl font-bold tracking-tight text-white group-hover:text-indigo-400 transition-colors">
-              Mock Interviews
+              Interview Coach
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Practice with an AI trained on real technical and behavioral questions from top-tier companies. Receive instant, actionable feedback.
+              Practice with a real-time, interactive AI coach that provides instant feedback to sharpen your technical responses and behavioral readiness.
             </p>
           </div>
         </motion.div>
@@ -207,10 +204,10 @@ export default function Home() {
               <BarChart className="w-5.5 h-5.5 text-emerald-400" />
             </div>
             <h3 className="text-xl font-bold tracking-tight text-white group-hover:text-emerald-400 transition-colors">
-              Continuous Trajectory Analytics
+              Career Analytics
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md">
-              Monitor your market value, skill gaps, and industry demand in real-time. The dashboard acts as a cockpit for your career progression.
+              Monitor your career growth and industry readiness through a visual dashboard that tracks your skill progression and market value in real-time.
             </p>
           </div>
 
@@ -228,21 +225,52 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 select-none mt-12">
-        <div className="flex flex-col gap-1 text-center md:text-left">
-          <Link href="/" className="flex items-center justify-center md:justify-start gap-2 select-none hover:opacity-80 transition-opacity group">
-            <span className="text-sm font-bold tracking-wide uppercase text-white select-none group-hover:text-purple-400 transition-colors">PathAI</span>
-          </Link>
-          <span className="text-xs text-gray-600 font-medium tracking-wide">
-            © 2024 PathAI. Surgical Precision in Career Growth.
-          </span>
-        </div>
+      {/* FOOTER */}
+      {/* FOOTER */}
+      {/* FOOTER */}
+      <footer className="relative z-10 bg-[#060608] border-t border-white/5 py-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
+            {/* Brand Section */}
+            <div className="flex flex-col items-center md:items-start gap-3">
+              <Link href="/" className="flex items-center gap-2.5 group">
+                <BrainCircuit className="w-6 h-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform" />
+                <span className="text-xl font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors uppercase">PATHAI</span>
+              </Link>
+              <p className="text-[12px] text-white/30 font-medium tracking-wide">
+                Empowering the future of work through surgical AI precision.
+              </p>
+            </div>
 
-        <div className="flex items-center gap-6 text-xs text-gray-500 select-none">
-          <Link href="/get-started" className="hover:text-white transition-colors">Privacy</Link>
-          <Link href="/get-started" className="hover:text-white transition-colors">Terms</Link>
-          <Link href="/get-started" className="hover:text-white transition-colors">API</Link>
-          <Link href="/get-started" className="hover:text-white transition-colors">Careers</Link>
+            {/* Social Links Section */}
+            <div className="flex flex-col items-center md:items-end gap-3">
+               <h4 className="text-[9px] font-black text-white uppercase tracking-[0.3em] opacity-50">Connect</h4>
+               <div className="flex items-center gap-5">
+                  <Link href="#" className="text-white/30 hover:text-purple-400 transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </Link>
+                  <Link href="#" className="text-white/30 hover:text-purple-400 transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                  </Link>
+                  <Link href="#" className="text-white/30 hover:text-purple-400 transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]">
+                    <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+                  </Link>
+               </div>
+            </div>
+          </div>
+
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+            <span className="text-[9px] font-bold text-white/20 uppercase tracking-[0.4em]">
+              © 2026 PathAI. All rights reserved.
+            </span>
+            
+            <div className="flex items-center gap-8 text-[10px] font-bold text-white/30 tracking-widest uppercase">
+              <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
+              <Link href="#" className="hover:text-white transition-colors">Terms</Link>
+              <Link href="#" className="hover:text-white transition-colors">API</Link>
+              <Link href="#" className="hover:text-white transition-colors">Careers</Link>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

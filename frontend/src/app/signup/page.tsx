@@ -1,174 +1,137 @@
-import { signIn } from "@/auth";
+"use client";
+
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast, Toaster } from "sonner";
+import { Loader2, BrainCircuit, Eye, EyeOff } from "lucide-react";
+import axios from "axios";
 
 export default function SignupPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // 1. Create user in MongoDB
+      await axios.post("/api/auth/signup", { name, email, password });
+      
+      toast.success("Account created!", {
+          description: "Initializing your elite environment..."
+      });
+
+      // 2. Automatically sign in
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error("Sign in failed after registration");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.details || error.response?.data?.error || "Registration failed";
+      toast.error("Signup Failed", {
+          description: errorMsg
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center relative bg-[#0b0c10] p-4 select-none overflow-hidden select-none">
-      {/* Subtle radial background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#121319_0%,_#090a0f_100%)] pointer-events-none" />
+    <div className="min-h-screen flex items-center justify-center relative bg-[#0b0c10] p-4 select-none overflow-hidden">
+      <Toaster position="top-center" theme="dark" richColors />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(109,40,217,0.08)_0%,_#090a0f_100%)] pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-40 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Decorative blurred background circles */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-500/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-40 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
-
-      {/* Auth Card Exactly like the Reference Image */}
       <div className="relative z-10 w-full max-w-[440px] backdrop-blur-xl bg-[#131418]/90 border border-white/5 rounded-2xl p-10 shadow-2xl flex flex-col justify-between">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block mb-2 select-none">
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white antialiased">
-              PathAI
-            </h1>
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Link href="/" className="inline-flex flex-col items-center mb-2 group">
+            <div className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-tr from-violet-600 to-blue-600 flex items-center justify-center shadow-lg shadow-violet-500/20 select-none group-hover:scale-105 transition-transform">
+              <BrainCircuit className="w-7 h-7 text-white" />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white antialiased group-hover:text-violet-400 transition-colors">PathAI</h1>
           </Link>
-          <p className="text-[14px] font-medium text-zinc-400">
-            Create your elite career dashboard.
-          </p>
+          <p className="text-[14px] font-medium text-zinc-400">Unlock your AI-driven career potential.</p>
         </div>
 
-        {/* OAuth Buttons */}
-        <div className="space-y-3.5 mb-6">
-          <form
-            action={async () => {
-              "use server";
-              await signIn("google", { redirectTo: "/dashboard" });
-            }}
-          >
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1e1f24] hover:bg-[#282a32] text-zinc-200 border border-white/[0.04] hover:border-white/[0.08] transition-all rounded-xl font-medium cursor-pointer"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" className="flex-shrink-0">
-                <path
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  fill="#F5F5F7"
-                />
-                <path
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  fill="#F5F5F7"
-                />
-                <path
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  fill="#F5F5F7"
-                />
-                <path
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  fill="#F5F5F7"
-                />
-              </svg>
-              Continue with Google
-            </button>
-          </form>
-
-          <form
-            action={async () => {
-              "use server";
-              await signIn("github", { redirectTo: "/dashboard" });
-            }}
-          >
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1e1f24] hover:bg-[#282a32] text-zinc-200 border border-white/[0.04] hover:border-white/[0.08] transition-all rounded-xl font-medium cursor-pointer"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="flex-shrink-0 text-white">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              Continue with GitHub
-            </button>
-          </form>
-        </div>
-
-        {/* OR EMAIL divider */}
-        <div className="flex items-center gap-4 mb-6 select-none">
-          <div className="h-[1px] flex-1 bg-white/[0.06]" />
-          <span className="text-[10px] tracking-widest text-zinc-500 font-bold uppercase">
-            Or Email
-          </span>
-          <div className="h-[1px] flex-1 bg-white/[0.06]" />
-        </div>
-
-        <form
-          action={async (formData) => {
-            "use server";
-            const email = formData.get("email");
-            const password = formData.get("password");
-            if (email) {
-              await signIn("credentials", { email, password, redirectTo: "/dashboard" });
-            }
-          }}
-        >
-          {/* Form Inputs */}
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4 mb-6">
             <div>
-              <label
-                htmlFor="fullName"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2 select-none"
-              >
-                Full Name
-              </label>
+              <label htmlFor="name" className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2">Full Name</label>
               <input
-                id="fullName"
-                name="fullName"
+                id="name"
                 type="text"
-                placeholder="John Doe"
-                autoComplete="name"
-                className="w-full px-4 py-3 bg-[#191a1e] border border-white/[0.04] rounded-xl text-[14px] text-white placeholder-zinc-600 outline-none focus:border-white/10 transition-all focus:bg-[#1d1e23]"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Mohamed Rukshan"
+                className="w-full h-[48px] px-4 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-[#6d28d9] focus:ring-1 focus:ring-[#6d28d9] focus:shadow-[0_0_15px_rgba(109,40,217,0.3)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
               />
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2 select-none"
-              >
-                Email Address
-              </label>
+              <label htmlFor="email" className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2">Email Address</label>
               <input
                 id="email"
-                name="email"
                 type="email"
-                placeholder="professional@example.com"
-                autoComplete="email"
-                className="w-full px-4 py-3 bg-[#191a1e] border border-white/[0.04] rounded-xl text-[14px] text-white placeholder-zinc-600 outline-none focus:border-white/10 transition-all focus:bg-[#1d1e23]"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="mnmrukshan22@gmail.com"
+                className="w-full h-[48px] px-4 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-[#6d28d9] focus:ring-1 focus:ring-[#6d28d9] focus:shadow-[0_0_15px_rgba(109,40,217,0.3)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
               />
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2 select-none"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="••••••••"
-                autoComplete="new-password"
-                className="w-full px-4 py-3 bg-[#191a1e] border border-white/[0.04] rounded-xl text-[14px] text-white placeholder-zinc-600 outline-none focus:border-white/10 transition-all focus:bg-[#1d1e23]"
-              />
+              <label htmlFor="password" className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2">Password</label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full h-[48px] px-4 pr-12 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-[#6d28d9] focus:ring-1 focus:ring-[#6d28d9] focus:shadow-[0_0_15px_rgba(109,40,217,0.3)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* CTA Button with gradient */}
           <button
             type="submit"
+            disabled={isLoading}
             style={{ background: "linear-gradient(135deg, #6d28d9, #1d4ed8)" }}
             className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 hover:brightness-110 active:brightness-95 transition-all text-[15px] text-white font-semibold rounded-xl select-none mb-6 text-center cursor-pointer"
           >
-            Access Intelligence
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Enter Platform"}
           </button>
         </form>
 
-        {/* Sign in prompt */}
         <div className="text-center text-[13.5px] font-medium text-zinc-400 select-none">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-white font-bold hover:underline transition-all"
-          >
-            Sign in
-          </Link>
+          <Link href="/login" className="text-white font-bold hover:text-purple-400 transition-colors hover:underline">Sign in</Link>
         </div>
       </div>
     </div>

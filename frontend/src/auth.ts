@@ -1,37 +1,41 @@
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
-import GitHub from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
+import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import clientPromise from "@/lib/mongodb"
+import bcrypt from "bcryptjs"
+import { authConfig } from "./auth.config"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
+  adapter: MongoDBAdapter(clientPromise, { databaseName: "pathai_db" }),
   providers: [
-    Google,
-    GitHub,
     Credentials({
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
       async authorize(credentials) {
-        if (credentials?.email) {
-          return {
-            id: "1",
-            name: String(credentials.email).split("@")[0],
-            email: String(credentials.email),
+        if (!credentials?.email || !credentials?.password) return null
+
+        const client = await clientPromise
+        const db = client.db("pathai_db")
+        const user = await db.collection("users").findOne({ email: credentials.email })
+
+        if (user && user.password) {
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          )
+          if (isPasswordCorrect) {
+            return {
+              id: user._id.toString(),
+              name: user.name,
+              email: user.email,
+            }
           }
         }
         return null
       },
     }),
   ],
-  secret: process.env.AUTH_SECRET || "d5d34be7e26978df0b4d4554b73b53f0",
-  trustHost: true,
-  pages: {
-    signIn: "/login",
+  session: {
+    strategy: "jwt",
   },
-  callbacks: {
-    authorized: async ({ auth }) => {
-      return !!auth
-    },
-  },
+  secret: process.env.AUTH_SECRET,
 })

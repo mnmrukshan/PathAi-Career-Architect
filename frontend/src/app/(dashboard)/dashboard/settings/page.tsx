@@ -1,17 +1,19 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Settings, User, Moon, Sun, Zap, HelpCircle, Edit3, Save, Loader2, Camera, Mail, ShieldCheck } from "lucide-react";
+import { Settings, User, Moon, Sun, Zap, HelpCircle, Edit3, Save, Loader2, Camera, Mail, ShieldCheck, LogOut } from "lucide-react";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
 import { useTheme } from "@/context/ThemeContext";
+import { useSession, signOut } from "next-auth/react";
 
 export default function SettingsPage() {
+  const { data: session } = useSession();
   const { theme: currentTheme, setTheme, instantAnalysis, setInstantAnalysis } = useTheme();
   
-  const [name, setName] = useState("Mohamed Rukshan");
-  const [email, setEmail] = useState("m.rukshan@example.com");
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [name, setName] = useState(session?.user?.name || "");
+  const [email, setEmail] = useState(session?.user?.email || "");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(session?.user?.image || null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   
   const [isLoading, setIsLoading] = useState(true);
@@ -19,11 +21,19 @@ export default function SettingsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (session?.user) {
+      setName(session.user.name || "");
+      setEmail(session.user.email || "");
+      if (session.user.image && !avatarUrl) {
+        setAvatarUrl(session.user.image);
+      }
+    }
+  }, [session, avatarUrl]);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get("http://localhost:8000/api/user/profile?user_id=demo-user-123");
-        setName(res.data.name || "Mohamed Rukshan");
-        setEmail(res.data.email || "m.rukshan@example.com");
         setAvatarUrl(res.data.avatar_url || null);
         
         // Sync theme and preferences from DB if they exist
@@ -88,28 +98,27 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-10 max-w-5xl select-none pb-20 animate-in fade-in duration-700">
+    <div className="space-y-6 max-w-5xl select-none pb-20 animate-in fade-in duration-700">
       <Toaster position="top-center" theme="dark" richColors />
-      
-      {/* Header */}
-      <div>
-        <h1 className="text-4xl font-extrabold tracking-tight text-white mb-2 font-display">
-          Configuration
-        </h1>
-        <p className="text-[14.5px] font-medium text-zinc-400 max-w-2xl leading-relaxed">
-          Tune your career intelligence parameters. Adjust profile semantics, aesthetic environments, and AI notification thresholds.
-        </p>
-      </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Professional Identity Section */}
         <div className="p-8 bg-[#0f1015]/70 border border-white/[0.04] backdrop-blur-xl rounded-2xl space-y-8 hover:border-white/[0.08] transition-all">
-          <div className="flex items-center justify-between border-b border-white/[0.03] pb-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-500/10 rounded-lg">
-                 <User className="w-5 h-5 text-indigo-400" />
+          <div className="flex items-center justify-between border-b border-white/[0.03] pb-8">
+            <div className="flex items-center gap-5">
+              <div className="relative group">
+                <div className="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.15)] group-hover:shadow-[0_0_35px_rgba(168,85,247,0.3)] transition-all duration-500 overflow-hidden">
+                   {avatarUrl ? (
+                     <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                   ) : (
+                     <User className="w-7 h-7 text-purple-400" />
+                   )}
+                </div>
+                <div className="absolute -inset-1.5 bg-purple-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
               </div>
-              <h3 className="text-base font-bold text-slate-200">Professional Identity</h3>
+              <div>
+                <h3 className="text-3xl font-bold tracking-tight text-white font-display">Professional Identity</h3>
+              </div>
             </div>
             
             <button
@@ -141,20 +150,47 @@ export default function SettingsPage() {
                 <input type="file" ref={fileInputRef} onChange={onFileChange} className="hidden" accept="image/*" />
               </div>
               <div>
-                <h4 className="text-[17px] font-black text-white mb-1 tracking-tight">Avatar Synthesis</h4>
-                <p className="text-[12px] font-medium text-zinc-500 max-w-xs leading-relaxed italic">Upload headshot for corporate alignment optimization.</p>
+                <h4 className="text-[17px] font-black text-white mb-1 tracking-tight">Profile Picture</h4>
+                <p className="text-[12px] font-medium text-zinc-500 max-w-xs leading-relaxed italic">Upload a professional photo to personalize your career profile.</p>
               </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 flex-1 w-full">
               <div className="space-y-2.5">
-                <label className="flex items-center gap-2 text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase"><ShieldCheck className="w-3 h-3" /> Full Legal Name</label>
+                <label className="flex items-center gap-2 text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase"><ShieldCheck className="w-3 h-3" /> Full Name</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-5 py-4 bg-[#16171b]/60 border border-white/[0.06] hover:border-white/[0.1] rounded-2xl text-sm text-white outline-none transition-all focus:bg-[#1a1b20]" />
               </div>
               <div className="space-y-2.5">
-                <label className="flex items-center gap-2 text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase"><Mail className="w-3 h-3" /> Comm Channel</label>
+                <label className="flex items-center gap-2 text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase"><Mail className="w-3 h-3" /> Email Address</label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-5 py-4 bg-[#16171b]/60 border border-white/[0.06] hover:border-white/[0.1] rounded-2xl text-sm text-white outline-none transition-all focus:bg-[#1a1b20]" />
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Security & Access Section */}
+        <div className="p-8 bg-[#0f1015]/70 border border-white/[0.04] backdrop-blur-xl rounded-2xl space-y-8 hover:border-white/[0.08] transition-all">
+          <div className="flex items-center justify-between border-b border-white/[0.03] pb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-amber-500/10 rounded-lg">
+                 <ShieldCheck className="w-5 h-5 text-amber-400" />
+              </div>
+              <h3 className="text-base font-bold text-slate-200">Security & Access</h3>
+            </div>
+            
+            <button className="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black uppercase tracking-widest text-zinc-400 transition-all active:scale-95">
+                Update Password
+            </button>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="p-5 bg-[#14161d]/40 border border-white/[0.03] rounded-2xl space-y-1">
+                <h4 className="text-[13px] font-bold text-white">Two-Factor Authentication</h4>
+                <p className="text-[11px] text-zinc-500 italic">Add an extra layer of security to your career vault.</p>
+            </div>
+            <div className="p-5 bg-[#14161d]/40 border border-white/[0.03] rounded-2xl space-y-1">
+                <h4 className="text-[13px] font-bold text-white">Active Sessions</h4>
+                <p className="text-[11px] text-zinc-500 italic">Manage your active logins across multiple devices.</p>
             </div>
           </div>
         </div>
@@ -213,6 +249,28 @@ export default function SettingsPage() {
             <div className={`w-12 h-7 rounded-full flex items-center px-1.5 transition-all duration-300 ${instantAnalysis ? 'bg-indigo-600 justify-end shadow-[0_0_15px_rgba(79,70,229,0.4)]' : 'bg-zinc-800 justify-start'}`}>
               <div className="w-4.5 h-4.5 bg-white rounded-full shadow-lg" />
             </div>
+          </div>
+        </div>
+        {/* Account Actions Section */}
+        <div className="p-8 bg-[#0f1015]/70 border border-white/[0.04] backdrop-blur-xl rounded-2xl space-y-8 hover:border-red-500/10 transition-all group">
+          <div className="flex items-center gap-3 border-b border-white/[0.03] pb-6">
+            <div className="p-2 bg-red-500/10 rounded-lg group-hover:bg-red-500/20 transition-colors">
+               <LogOut className="w-5 h-5 text-red-400" />
+            </div>
+            <h3 className="text-base font-bold text-slate-200">Account Session</h3>
+          </div>
+
+          <div className="flex items-center justify-between p-5 bg-[#14161d]/40 border border-red-500/5 rounded-2xl group-hover:border-red-500/20 transition-all">
+            <div>
+              <h4 className="text-[14px] font-black text-white mb-1 group-hover:text-red-400 transition-colors">Secure Sign Out</h4>
+              <p className="text-[11px] font-medium text-zinc-600 italic">Disconnect your session from this terminal.</p>
+            </div>
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="px-6 py-2.5 bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-red-500 text-red-400 hover:text-white text-[12px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg hover:shadow-red-500/20 active:scale-95"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>

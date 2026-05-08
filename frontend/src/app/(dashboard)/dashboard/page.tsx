@@ -2,17 +2,25 @@
 
 import React, { useState, useEffect } from "react";
 import { Sparkles, ArrowRight, CircleDot, Trash2, Calendar, Layout, Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
-  const [firstName, setFirstName] = useState("Rukshan");
+  const { data: session } = useSession();
+  const [firstName, setFirstName] = useState("Guest");
   const [savedRoadmaps, setSavedRoadmaps] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    if (session?.user?.name) {
+      setFirstName(session.user.name.split(" ").pop() || "Guest");
+    }
+  }, [session]);
 
   const fetchData = async () => {
     try {
@@ -23,9 +31,6 @@ export default function DashboardPage() {
       ]);
       setSavedRoadmaps(roadmapsRes.data);
       setStats(statsRes.data);
-      if (profileRes.data.name) {
-        setFirstName(profileRes.data.name.split(" ")[0]);
-      }
     } catch (err) {
       console.error("Failed to fetch dashboard data", err);
       toast.error("Sync Error", {
@@ -79,7 +84,7 @@ export default function DashboardPage() {
         <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#101c18] border border-emerald-500/30 rounded-xl select-none flex-shrink-0 self-start md:self-center">
           <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" />
           <span className="text-[11px] font-black tracking-wider text-emerald-400 uppercase select-none">
-            AI ENGINE: READY
+            PATHAI ENGINE: ACTIVE
           </span>
         </div>
       </div>

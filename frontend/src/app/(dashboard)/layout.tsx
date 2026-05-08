@@ -1,6 +1,6 @@
 import { auth, signOut } from "@/auth";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, Compass, FileText, MessageSquare, Settings, HelpCircle, Sparkles } from "lucide-react";
+import { LogOut, LayoutDashboard, Compass, FileText, MessageSquare, Settings, HelpCircle, Sparkles, User, BrainCircuit } from "lucide-react";
 import Image from "next/image";
 
 export default async function DashboardLayout({
@@ -13,12 +13,12 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-[#090a0f] text-slate-100 select-none antialiased">
       {/* SIDEBAR */}
-      <aside className="w-[280px] bg-[#0d0e12]/80 border-r border-white/5 p-6 flex flex-col justify-between backdrop-blur-md sticky top-0 h-screen select-none z-40">
-        <div className="space-y-8">
+      <aside className="w-[280px] bg-[#0d0e12]/80 border-r border-white/5 p-6 flex flex-col backdrop-blur-md sticky top-0 h-screen select-none z-40">
+        <div className="space-y-12">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 cursor-pointer group hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-blue-600 flex items-center justify-center font-bold text-white shadow-lg shadow-violet-500/20 select-none group-hover:scale-105 transition-transform">
-              P
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/20 select-none group-hover:scale-105 transition-transform">
+              <BrainCircuit className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-lg font-bold tracking-tight text-white leading-tight group-hover:text-violet-400 transition-colors">
@@ -29,9 +29,9 @@ export default async function DashboardLayout({
               </p>
             </div>
           </Link>
-
+ 
           {/* Nav links */}
-          <nav className="space-y-2 select-none">
+          <nav className="space-y-3 select-none">
             <Link
               href="/dashboard"
               className="flex items-center gap-3.5 px-4 py-3 text-[14px] font-medium text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-all rounded-xl"
@@ -54,27 +54,27 @@ export default async function DashboardLayout({
               Interview Coach
             </Link>
             <Link
-              href="/settings"
+              href="/dashboard/settings"
               className="flex items-center gap-3.5 px-4 py-3 text-[14px] font-medium text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-all rounded-xl"
             >
               <Settings className="w-[18px] h-[18px]" />
               Settings
             </Link>
           </nav>
-
+ 
           {/* New Analysis vibrant button */}
           <Link
-            href="/dashboard"
+            href="/resume-builder"
             style={{ background: "linear-gradient(135deg, #6d28d9, #1d4ed8)" }}
             className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-[13.5px] text-white font-semibold rounded-xl hover:brightness-110 active:brightness-95 transition-all shadow-xl shadow-violet-600/10 cursor-pointer select-none"
           >
             <Sparkles className="w-4 h-4" />
-            New Analysis
+            Create New Path
           </Link>
         </div>
-
+ 
         {/* Support & Logout */}
-        <div className="space-y-2 select-none">
+        <div className="mt-auto pb-4 space-y-2 select-none">
           <Link
             href="/support"
             className="flex items-center gap-3.5 px-4 py-3 text-[14px] font-medium text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-all rounded-xl"

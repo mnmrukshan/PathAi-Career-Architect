@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Navigate your software engineering career with AI-driven personalized roadmaps, resume intelligence, and mentor guidance.",
 };
 
-import { ThemeProvider } from "@/context/ThemeContext";
+import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,
@@ -19,13 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={outfit.className}>
-        <ThemeProvider>
+        <Providers>
           <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20" />
           <main className="relative min-h-screen">
             {children}
           </main>
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
 }
+

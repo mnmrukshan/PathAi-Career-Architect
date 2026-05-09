@@ -22,16 +22,14 @@ import {
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#060608] text-white font-sans overflow-x-hidden pb-16 select-none selection:bg-purple-500/30 selection:text-white">
-      {/* Dynamic Wave-like Neon Glow Background */}
-      <div className="absolute top-0 left-0 right-0 h-[600px] pointer-events-none overflow-hidden select-none z-0">
-        <div 
-          style={{ background: "radial-gradient(ellipse at 50% -20%, rgba(147, 51, 234, 0.15) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 100%)" }}
-          className="w-full h-full"
-        />
-        <div 
-          style={{ background: "radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.08), transparent 40%)" }}
-          className="absolute inset-0"
-        />
+      {/* Elite Minimalist Hero Background */}
+      <div className="absolute top-0 left-0 right-0 h-[800px] pointer-events-none overflow-hidden select-none z-0 bg-[#000000]">
+        {/* Subtle Ambient Glows */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[800px] bg-purple-900/10 blur-[180px] rounded-full" />
+        <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-cyan-950/10 blur-[160px] rounded-full" />
+        
+        {/* Very Subtle Center Highlight */}
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-white/[0.02] blur-[100px] rounded-full" />
       </div>
 
       {/* TOP NAV BAR */}
@@ -70,7 +68,7 @@ export default function Home() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-20 text-center space-y-8">
+      <section className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-32 text-center space-y-8">
         {/* Pill Badge */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -87,12 +85,12 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="space-y-4"
+          className="space-y-3"
         >
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.15] text-white">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-[1.1] text-white">
             Build Your Career Path<br />
-            <span style={{ background: "linear-gradient(135deg, #a855f7, #22d3ee)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              with Surgical Precision
+            <span style={{ background: "linear-gradient(135deg, #a855f7, #22d3ee)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }} className="drop-shadow-[0_0_30px_rgba(168,85,247,0.35)] tracking-tight">
+              with Strategic Clarity
             </span>
           </h1>
         </motion.div>
@@ -112,7 +110,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 select-none"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 select-none"
         >
           <Link 
             href="/signup" 

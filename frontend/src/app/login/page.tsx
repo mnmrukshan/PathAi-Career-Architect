@@ -57,7 +57,7 @@ export default function LoginPage() {
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white antialiased group-hover:text-violet-400 transition-colors">PathAI</h1>
           </Link>
-          <p className="text-[14px] font-medium text-zinc-400">Unlock your AI-driven career potential.</p>
+          <p className="text-[14px] font-medium text-white/60">Unlock your AI-driven career potential.</p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -71,7 +71,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="mnmrukshan22@gmail.com"
-                className="w-full h-[48px] px-4 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-[#6d28d9] focus:ring-1 focus:ring-[#6d28d9] focus:shadow-[0_0_15px_rgba(109,40,217,0.3)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
+                className="w-full h-[48px] px-4 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-white/20 focus:ring-1 focus:ring-white/10 focus:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
               />
             </div>
 
@@ -88,14 +88,18 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full h-[48px] px-4 pr-12 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-[#6d28d9] focus:ring-1 focus:ring-[#6d28d9] focus:shadow-[0_0_15px_rgba(109,40,217,0.3)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
+                  className="w-full h-[48px] px-4 pr-12 bg-white/[0.05] border border-white/10 rounded-xl text-[14px] text-white placeholder-white/30 outline-none focus:border-white/20 focus:ring-1 focus:ring-white/10 focus:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all focus:bg-white/[0.08] backdrop-blur-md"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors focus:outline-none"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? (
+                    <EyeOff size={18} className="text-violet-400 drop-shadow-[0_0_8px_rgba(167,139,250,0.6)]" />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
             </div>
@@ -113,7 +117,7 @@ export default function LoginPage() {
 
         <div className="text-center text-[13.5px] font-medium text-zinc-400 select-none">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-white font-bold hover:text-purple-400 transition-colors hover:underline">Sign up</Link>
+          <Link href="/signup" className="text-[#6d28d9] font-bold hover:text-violet-400 transition-colors hover:underline">Sign up</Link>
         </div>
       </div>
     </div>

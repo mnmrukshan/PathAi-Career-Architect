@@ -52,7 +52,7 @@ export default function DashboardPage() {
     try {
       await axios.delete(`http://127.0.0.1:8000/api/roadmap/${id}`);
       setSavedRoadmaps(prev => prev.filter(r => r._id !== id));
-      toast.success("Trajectory Purged");
+      toast.success("Roadmap Deleted");
     } catch (err) {
       console.error("Delete failed", err);
       toast.error("Operation Failed");

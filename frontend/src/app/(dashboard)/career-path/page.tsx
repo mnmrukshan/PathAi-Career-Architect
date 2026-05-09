@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle, Circle, Lock, Sparkles, Loader2, ArrowRight } from "lucide-react";
+import SkillAnalytics from "./components/SkillAnalytics";
 
 export default function CareerPathPage() {
   const [targetRole, setTargetRole] = useState("Senior Full Stack Engineer");
@@ -46,7 +46,7 @@ export default function CareerPathPage() {
   };
 
   return (
-    <div className="space-y-10 max-w-4xl select-none">
+    <div className={`space-y-10 ${roadmap ? 'max-w-6xl' : 'max-w-4xl'} select-none transition-all duration-500`}>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -126,120 +126,138 @@ export default function CareerPathPage() {
         </div>
       )}
 
-      {/* Dynamic interactive Timeline steps if generated */}
-      {roadmap && (
-        <div className="space-y-6">
-          <div className="bg-[#0e0f14]/80 border border-white/[0.03] backdrop-blur-md p-6 rounded-2xl space-y-3.5 select-none hover:border-white/[0.08] transition-all">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 select-none">
-                Gap Analysis
-              </span>
-              <span className="text-sm font-bold text-cyan-400">
-                Skills identified to learn
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2 pt-2">
-              {roadmap.skill_gap?.map((s: string, idx: number) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 bg-[#152329] border border-cyan-400/30 rounded-lg text-xs font-bold text-cyan-300 select-none"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
+      {/* Main Layout Grid */}
+      <div className={`grid gap-10 ${roadmap ? 'lg:grid-cols-12' : 'grid-cols-1'}`}>
+        
+        {/* Left Side: Skill Analytics (Sticky) */}
+        {roadmap && (
+          <div className="lg:col-span-4 order-2 lg:order-1">
+            <SkillAnalytics 
+              currentSkills={currentSkills.split(",").map(s => s.trim())} 
+              targetRole={targetRole} 
+              skillGaps={roadmap.skill_gap || []} 
+            />
           </div>
+        )}
 
-          <div className="relative border-l border-white/[0.05] ml-5 pl-10 space-y-8 select-none">
-            {roadmap.roadmap?.map((weekItem: any, idx: number) => {
-              const isChecked = !!checkedSteps[idx];
-              return (
-                <div key={idx} className="relative flex flex-col gap-2">
-                  <button
-                    onClick={() => toggleCheck(idx)}
-                    className={`absolute -left-[54px] top-1.5 w-7 h-7 rounded-full flex items-center justify-center border transition-all cursor-pointer select-none ${
-                      isChecked
-                        ? "bg-[#16291a] border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
-                        : "bg-[#0d1e29] border-cyan-400 text-cyan-400 shadow-[0_0_12px_#22d3ee]"
-                    }`}
-                  >
-                    {isChecked ? (
-                      <CheckCircle className="w-4 h-4" />
-                    ) : (
-                      <Circle className="w-4 h-4" />
-                    )}
-                  </button>
+        {/* Right Side: Roadmap Timeline */}
+        <div className={`${roadmap ? 'lg:col-span-8' : 'col-span-1'} order-1 lg:order-2`}>
+          {roadmap && (
+            <div className="space-y-6">
+              <div className="bg-[#0e0f14]/80 border border-white/[0.03] backdrop-blur-md p-6 rounded-2xl space-y-3.5 select-none hover:border-white/[0.08] transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 select-none">
+                    Gap Analysis
+                  </span>
+                  <span className="text-sm font-bold text-cyan-400">
+                    Skills identified to learn
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {roadmap.skill_gap?.map((s: string, idx: number) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-[#152329] border border-cyan-400/30 rounded-lg text-xs font-bold text-cyan-300 select-none"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
 
-                  <div
-                    className={`p-6 border rounded-2xl backdrop-blur-xl hover:border-white/[0.08] transition-all flex flex-col justify-between gap-3 ${
-                      isChecked
-                        ? "bg-[#0d1511]/40 border-emerald-500/10 opacity-70"
-                        : "bg-[#0f151c]/90 border-cyan-500/30 shadow-2xl shadow-cyan-500/5 hover:border-cyan-500/50"
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className={`text-lg font-bold leading-tight ${
-                          isChecked ? "text-zinc-500 line-through" : "text-white"
-                        }`}>
-                          Week {weekItem.week}: {weekItem.goal}
-                        </h3>
-                        <span className={`px-3 py-1 rounded-lg text-[9.5px] font-black tracking-widest uppercase select-none ${
+              <div className="relative border-l border-white/[0.05] ml-5 pl-10 space-y-8 select-none">
+                {roadmap.roadmap?.map((weekItem: any, idx: number) => {
+                  const isChecked = !!checkedSteps[idx];
+                  return (
+                    <div key={idx} className="relative flex flex-col gap-2">
+                      <button
+                        onClick={() => toggleCheck(idx)}
+                        className={`absolute -left-[54px] top-1.5 w-7 h-7 rounded-full flex items-center justify-center border transition-all cursor-pointer select-none ${
                           isChecked
-                            ? "bg-zinc-800 border-zinc-700 text-zinc-500"
-                            : "bg-[#122421] border border-cyan-400/30 text-cyan-400"
-                        }`}>
-                          {isChecked ? "Completed" : "In Progress"}
-                        </span>
-                      </div>
+                            ? "bg-[#16291a] border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                            : "bg-[#0d1e29] border-cyan-400 text-cyan-400 shadow-[0_0_12px_#22d3ee]"
+                        }`}
+                      >
+                        {isChecked ? (
+                          <CheckCircle className="w-4 h-4" />
+                        ) : (
+                          <Circle className="w-4 h-4" />
+                        )}
+                      </button>
 
-                      <p className={`text-[13px] max-w-xl font-medium leading-relaxed ${
-                        isChecked ? "text-zinc-600" : "text-zinc-400"
-                      }`}>
-                        <strong>Task:</strong> {weekItem.task}
-                      </p>
-
-                      <div className="flex flex-wrap gap-2 mt-3 select-none">
-                        {weekItem.topics?.map((topic: string, tIdx: number) => (
-                          <span
-                            key={tIdx}
-                            className={`px-2 py-0.5 border text-[11px] font-bold rounded-md select-none ${
+                      <div
+                        className={`p-6 border rounded-2xl backdrop-blur-xl hover:border-white/[0.08] transition-all flex flex-col justify-between gap-3 ${
+                          isChecked
+                            ? "bg-[#0d1511]/40 border-emerald-500/10 opacity-70"
+                            : "bg-[#0f151c]/90 border-cyan-500/30 shadow-2xl shadow-cyan-500/5 hover:border-cyan-500/50"
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className={`text-lg font-bold leading-tight ${
+                              isChecked ? "text-zinc-500 line-through" : "text-white"
+                            }`}>
+                              Week {weekItem.week}: {weekItem.goal}
+                            </h3>
+                            <span className={`px-3 py-1 rounded-lg text-[9.5px] font-black tracking-widest uppercase select-none ${
                               isChecked
-                                ? "bg-zinc-800/40 border-zinc-700/30 text-zinc-600"
-                                : "bg-cyan-500/10 border-cyan-400/20 text-cyan-300"
-                            }`}
-                          >
-                            {topic}
-                          </span>
-                        ))}
+                                ? "bg-zinc-800 border-zinc-700 text-zinc-500"
+                                : "bg-[#122421] border border-cyan-400/30 text-cyan-400"
+                            }`}>
+                              {isChecked ? "Completed" : "In Progress"}
+                            </span>
+                          </div>
+
+                          <p className={`text-[13px] max-w-xl font-medium leading-relaxed ${
+                            isChecked ? "text-zinc-600" : "text-zinc-400"
+                          }`}>
+                            <strong>Task:</strong> {weekItem.task}
+                          </p>
+
+                          <div className="flex flex-wrap gap-2 mt-3 select-none">
+                            {weekItem.topics?.map((topic: string, tIdx: number) => (
+                              <span
+                                key={tIdx}
+                                className={`px-2 py-0.5 border text-[11px] font-bold rounded-md select-none ${
+                                  isChecked
+                                    ? "bg-zinc-800/40 border-zinc-700/30 text-zinc-600"
+                                    : "bg-cyan-500/10 border-cyan-400/20 text-cyan-300"
+                                }`}
+                              >
+                                {topic}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
-      {/* Static roadmap if nothing generated yet exactly like mockup */}
-      {!roadmap && (
-        <div className="relative border-l border-white/[0.05] ml-5 pl-10 space-y-8 select-none opacity-50 pointer-events-none">
-          <div className="relative flex flex-col gap-2">
-            <div className="absolute -left-[54px] top-1 w-7 h-7 rounded-full bg-[#121319] border border-white/5 flex items-center justify-center text-zinc-600 select-none">
-              <Lock className="w-3.5 h-3.5" />
+          {/* Static roadmap if nothing generated yet */}
+          {!roadmap && (
+            <div className="relative border-l border-white/[0.05] ml-5 pl-10 space-y-8 select-none opacity-50 pointer-events-none">
+              <div className="relative flex flex-col gap-2">
+                <div className="absolute -left-[54px] top-1 w-7 h-7 rounded-full bg-[#121319] border border-white/5 flex items-center justify-center text-zinc-600 select-none">
+                  <Lock className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-zinc-600 select-none">
+                    Preview Roadmap Steps
+                  </h3>
+                  <p className="text-[13px] text-zinc-500 max-w-xl">
+                    Generate your personalized career path above to view active goals and milestones.
+                  </p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-zinc-600 select-none">
-                Preview Roadmap Steps
-              </h3>
-              <p className="text-[13px] text-zinc-500 max-w-xl">
-                Generate your personalized career path above to view active goals and milestones.
-              </p>
-            </div>
-          </div>
+          )}
         </div>
-      )}
+
+      </div>
     </div>
   );
 }

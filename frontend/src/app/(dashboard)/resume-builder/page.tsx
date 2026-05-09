@@ -153,9 +153,9 @@ export default function RoadmapArchitectPage() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-5">
+        <div className="grid gap-10 md:grid-cols-5 items-stretch">
           {/* Left Side: Input area */}
-          <div className="md:col-span-2 space-y-6">
+          <div className="md:col-span-2 flex flex-col space-y-6">
             
             {/* Mode Switcher */}
             <div className="flex bg-[#0f1015]/70 border border-white/[0.04] p-1.5 rounded-2xl">
@@ -237,7 +237,7 @@ export default function RoadmapArchitectPage() {
             <button
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className={`w-full group relative overflow-hidden flex items-center justify-center gap-3 px-6 py-5 rounded-2xl text-[14px] font-black tracking-widest uppercase transition-all
+                className={`w-full group relative overflow-hidden flex items-center justify-center gap-3 px-6 py-5 rounded-2xl text-[14px] font-black tracking-widest uppercase transition-all mt-auto
                   ${(isGenerating) 
                     ? "bg-[#1c1d24] text-zinc-600 border border-white/[0.02] cursor-not-allowed" 
                     : "bg-gradient-to-r from-indigo-600 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-indigo-500/20"}
@@ -258,7 +258,7 @@ export default function RoadmapArchitectPage() {
           </div>
 
           {/* Right Side: Results View */}
-          <div className="md:col-span-3 min-h-[500px]">
+          <div className="md:col-span-3">
             {!result && !isGenerating ? (
                <div className="h-full bg-[#0f1015]/40 border border-dashed border-white/[0.05] rounded-3xl flex flex-col items-center justify-center text-zinc-600 p-12 text-center">
                   <div className="w-20 h-20 bg-zinc-900/50 rounded-full flex items-center justify-center mb-6">
@@ -280,126 +280,140 @@ export default function RoadmapArchitectPage() {
                   </p>
                </div>
             ) : result ? (
-               <div className="space-y-8 animate-in fade-in duration-1000">
+               <div className="h-full animate-in fade-in duration-1000">
                   {/* Skill Gap Analysis Section */}
                   {result.skill_gap && result.skill_gap.length > 0 && (
-                    <div className="bg-[#1c1212]/40 border border-red-500/10 rounded-2xl p-8 relative overflow-hidden group">
+                    <div className="bg-[#1c1212]/40 border border-red-500/5 rounded-2xl p-8 relative overflow-hidden group shadow-[0_10px_40px_-15px_rgba(220,38,38,0.1)]">
                       <div className="absolute top-0 left-0 w-1 h-full bg-red-500/40 group-hover:bg-red-500 transition-colors" />
-                      <h3 className="text-[11px] font-black text-red-400/80 mb-4 flex items-center gap-2 uppercase tracking-widest">
+                      <h3 className="text-[11px] font-black text-red-400/80 mb-6 flex items-center gap-2 uppercase tracking-widest">
                         <AlertCircle className="w-3.5 h-3.5" /> Skill Architecture Gaps
                       </h3>
-                      <div className="flex flex-wrap gap-2.5">
+                      <div className="flex flex-wrap gap-3">
                         {result.skill_gap.map((gap: string, i: number) => (
-                          <span key={i} className="px-4 py-2 bg-red-500/5 border border-red-500/10 text-red-200/90 rounded-xl text-xs font-bold hover:bg-red-500/10 transition-colors cursor-default">
+                          <span key={i} className="px-4 py-2 bg-red-500/5 border border-red-500/10 text-red-200/90 rounded-xl text-[12px] font-bold hover:bg-red-500/10 hover:shadow-[0_0_12px_rgba(239,68,68,0.15)] hover:border-red-500/30 transition-all duration-300 cursor-default">
                             {gap}
                           </span>
                         ))}
                       </div>
                     </div>
                   )}
-
-                  {/* 12-Week Interactive Roadmap */}
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black text-white flex items-center gap-3">
-                            <Sparkles className="w-5 h-5 text-indigo-400" />
-                            12-Week Strategic Roadmap
-                        </h3>
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Live Strategy</span>
-                        </div>
-                    </div>
-                    
-                    <div className="space-y-6">
-                        {result.roadmap.map((item: any, idx: number) => (
-                        <div key={idx} className="bg-[#0f1015]/80 border border-white/[0.04] backdrop-blur-xl rounded-3xl p-8 hover:border-indigo-500/40 transition-all duration-500 group relative">
-                            {/* Animated progress indicator */}
-                            <div className="absolute top-0 left-0 w-1.5 h-full bg-white/[0.02] group-hover:bg-indigo-500/20 transition-all overflow-hidden">
-                                <div className="w-full h-1/3 bg-indigo-500 shadow-[0_0_15px_#6366f1] group-hover:translate-y-full transition-transform duration-[2000ms]" />
-                            </div>
-
-                            <div className="flex flex-col md:flex-row gap-8 pl-4">
-                                <div className="flex-shrink-0">
-                                    <div className="w-16 h-16 bg-[#16181d] border border-white/[0.05] group-hover:border-indigo-500/30 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl">
-                                        <span className="text-2xl font-black text-white group-hover:text-indigo-400 transition-colors">
-                                            {item.week < 10 ? `0${item.week}` : item.week}
-                                        </span>
-                                    </div>
-                                    <div className="mt-3 text-center">
-                                        <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Week</span>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex-1 space-y-6">
-                                    <div>
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <span className="px-2 py-0.5 bg-indigo-500/10 text-[9px] font-black text-indigo-400 rounded-md border border-indigo-500/20 tracking-tighter">PHASE {Math.ceil(item.week/4)}</span>
-                                            <h4 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">{item.goal}</h4>
-                                        </div>
-                                        <p className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] ml-1">Learning Milestones</p>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                                        <div className="space-y-4">
-                                            <h5 className="text-[10px] font-black text-zinc-600 uppercase tracking-widest flex items-center gap-2">
-                                                <div className="w-1 h-1 bg-indigo-500 rounded-full" /> Knowledge Modules
-                                            </h5>
-                                            <ul className="space-y-3.5">
-                                                {item.topics.map((topic: string, tIdx: number) => (
-                                                    <li key={tIdx} className="flex items-start gap-3 text-[13.5px] text-zinc-400 font-medium group/item">
-                                                        <div className="w-5 h-5 rounded-md bg-white/[0.02] border border-white/[0.05] flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/item:border-indigo-400/30 transition-colors">
-                                                            <CheckCircle2 className="w-3.5 h-3.5 text-zinc-700 group-hover/item:text-indigo-400" />
-                                                        </div>
-                                                        {topic}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        
-                                        <div className="space-y-4">
-                                            <h5 className="text-[10px] font-black text-zinc-600 uppercase tracking-widest flex items-center gap-2">
-                                                <div className="w-1 h-1 bg-indigo-500 rounded-full" /> Recommended Media
-                                            </h5>
-                                            <div className="space-y-3">
-                                                {item.resources.map((res: any, rIdx: number) => (
-                                                    <a key={rIdx} href={res.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-3.5 bg-white/[0.02] border border-white/[0.04] rounded-xl text-[13px] text-zinc-300 hover:bg-indigo-500/5 hover:border-indigo-500/20 transition-all group/res">
-                                                        <div className="flex items-center gap-3 truncate">
-                                                            <LinkIcon className="w-3.5 h-3.5 text-indigo-600 group-hover/res:text-indigo-400 transition-colors" />
-                                                            <span className="truncate font-medium">{res.title}</span>
-                                                        </div>
-                                                        <ArrowRight className="w-3 h-3 text-zinc-800 group-hover/res:text-indigo-400 group-hover/res:translate-x-1 transition-all" />
-                                                    </a>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Actionable Task Section */}
-                                    <div className="pt-6 border-t border-white/[0.03]">
-                                        <div className="flex items-start gap-5 p-5 bg-[#1c1d24]/40 rounded-2xl border border-white/[0.02] group-hover:border-indigo-500/10 transition-all">
-                                            <div className="w-10 h-10 bg-zinc-900/50 border border-white/[0.05] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-500/10 transition-colors shadow-lg">
-                                                <Target className="w-5 h-5 text-zinc-600 group-hover:text-indigo-400 transition-colors" />
-                                            </div>
-                                            <div>
-                                                <h5 className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-1.5 flex items-center gap-2">
-                                                    Execution Challenge 
-                                                    <span className="w-1 h-1 bg-zinc-800 rounded-full" />
-                                                </h5>
-                                                <p className="text-[13.5px] text-zinc-300 font-medium leading-relaxed italic">"{item.task}"</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        ))}
-                    </div>
-                  </div>
                </div>
             ) : null}
           </div>
         </div>
+
+        {/* Full-Width Roadmap Section */}
+        {result && (
+          <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 pt-10">
+            {/* Visual Divider */}
+            <div className="relative h-px w-full bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent">
+                <div className="absolute inset-0 blur-sm bg-indigo-500/10" />
+            </div>
+
+            <div className="space-y-8">
+              <div className="flex items-center justify-between px-4">
+                  <h3 className="text-2xl font-black text-white flex items-center gap-3">
+                      <div className="p-2 bg-indigo-500/10 rounded-lg">
+                        <Sparkles className="w-6 h-6 text-indigo-400" />
+                      </div>
+                      12-Week Strategic Roadmap
+                  </h3>
+                  <div className="flex items-center gap-3 bg-[#0f1015]/60 px-4 py-2 rounded-full border border-white/[0.03]">
+                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                      <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Live Strategy Mode</span>
+                  </div>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-6">
+                  {result.roadmap.map((item: any, idx: number) => (
+                  <div key={idx} className="bg-[#0f1015]/80 border border-white/[0.04] backdrop-blur-xl rounded-3xl p-8 hover:border-indigo-500/40 transition-all duration-500 group relative">
+                      {/* Animated progress indicator */}
+                      <div className="absolute top-0 left-0 w-1.5 h-full bg-white/[0.02] group-hover:bg-indigo-500/20 transition-all overflow-hidden">
+                          <div className="w-full h-1/3 bg-indigo-500 shadow-[0_0_15px_#6366f1] group-hover:translate-y-full transition-transform duration-[2000ms]" />
+                      </div>
+
+                      <div className="flex flex-col md:flex-row gap-10 pl-4">
+                          <div className="flex-shrink-0">
+                              <div className="w-20 h-20 bg-[#16181d] border border-white/[0.05] group-hover:border-indigo-500/30 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl relative overflow-hidden">
+                                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                  <span className="text-3xl font-black text-white group-hover:text-indigo-400 transition-colors relative z-10">
+                                      {item.week < 10 ? `0${item.week}` : item.week}
+                                  </span>
+                              </div>
+                              <div className="mt-3 text-center">
+                                  <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Week</span>
+                              </div>
+                          </div>
+                          
+                          <div className="flex-1 space-y-8">
+                              <div>
+                                  <div className="flex flex-wrap items-center gap-4 mb-3">
+                                      <span className="px-3 py-1 bg-indigo-500/10 text-[10px] font-black text-indigo-400 rounded-full border border-indigo-500/20 tracking-tighter">PHASE {Math.ceil(item.week/4)}</span>
+                                      <h4 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">{item.goal}</h4>
+                                  </div>
+                                  <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-[0.3em] ml-1">Learning Milestones</p>
+                              </div>
+
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                  <div className="space-y-5">
+                                      <h5 className="text-[11px] font-black text-zinc-600 uppercase tracking-widest flex items-center gap-2">
+                                          <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full" /> Knowledge Modules
+                                      </h5>
+                                      <ul className="grid grid-cols-1 gap-4">
+                                          {item.topics.map((topic: string, tIdx: number) => (
+                                              <li key={tIdx} className="flex items-start gap-3 text-[14.5px] text-zinc-400 font-medium group/item">
+                                                  <div className="w-5 h-5 rounded-md bg-white/[0.02] border border-white/[0.05] flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/item:border-indigo-400/30 transition-colors">
+                                                      <CheckCircle2 className="w-3.5 h-3.5 text-zinc-700 group-hover/item:text-indigo-400" />
+                                                  </div>
+                                                  {topic}
+                                              </li>
+                                          ))}
+                                      </ul>
+                                  </div>
+                                  
+                                  <div className="space-y-5">
+                                      <h5 className="text-[11px] font-black text-zinc-600 uppercase tracking-widest flex items-center gap-2">
+                                          <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full" /> Recommended Media
+                                      </h5>
+                                      <div className="grid grid-cols-1 gap-3">
+                                          {item.resources.map((res: any, rIdx: number) => (
+                                              <a key={rIdx} href={res.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/[0.04] rounded-xl text-[14px] text-zinc-300 hover:bg-indigo-500/5 hover:border-indigo-500/20 transition-all group/res">
+                                                  <div className="flex items-center gap-3 truncate">
+                                                      <div className="p-1.5 bg-indigo-500/10 rounded-lg group-hover/res:bg-indigo-500/20 transition-colors">
+                                                        <LinkIcon className="w-4 h-4 text-indigo-400" />
+                                                      </div>
+                                                      <span className="truncate font-semibold tracking-tight">{res.title}</span>
+                                                  </div>
+                                                  <ArrowRight className="w-4 h-4 text-zinc-800 group-hover/res:text-indigo-400 group-hover/res:translate-x-1 transition-all" />
+                                              </a>
+                                          ))}
+                                      </div>
+                                  </div>
+                              </div>
+
+                              {/* Actionable Task Section */}
+                              <div className="pt-8 border-t border-white/[0.03]">
+                                  <div className="flex items-start gap-6 p-6 bg-[#1c1d24]/40 rounded-3xl border border-white/[0.02] group-hover:border-indigo-500/10 transition-all shadow-inner">
+                                      <div className="w-12 h-12 bg-zinc-900/50 border border-white/[0.05] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-500/10 transition-colors shadow-lg">
+                                          <Target className="w-6 h-6 text-zinc-600 group-hover:text-indigo-400 transition-colors" />
+                                      </div>
+                                      <div>
+                                          <h5 className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                              Execution Challenge 
+                                              <span className="w-1.5 h-1.5 bg-indigo-500/30 rounded-full" />
+                                          </h5>
+                                          <p className="text-[15px] text-zinc-300 font-medium leading-relaxed italic opacity-90">"{item.task}"</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

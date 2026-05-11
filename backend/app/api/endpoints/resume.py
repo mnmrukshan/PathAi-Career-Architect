@@ -48,3 +48,20 @@ async def get_resume(resume_id: str):
         "id": resume["id"],
         "data": resume["data"]
     }
+
+@router.post("/optimize")
+async def optimize_resume_endpoint(file: UploadFile = File(...)):
+    if not file.filename.endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are supported")
+    
+    try:
+        # 1. Extract text from PDF
+        content = await file.read()
+        resume_text = pdf_service.extract_text_from_pdf(content)
+        
+        # 2. Optimize with Gemini
+        optimization_data = await gemini_service.optimize_resume(resume_text, "Senior Software Engineer")
+        
+        return optimization_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

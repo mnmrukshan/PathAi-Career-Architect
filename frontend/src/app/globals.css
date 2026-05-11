@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --foreground-rgb: 255, 255, 255;
@@ -14,12 +12,70 @@
   --glow-color: rgba(139, 92, 246, 0.15);
 }
 
+/* THEME CLASSES */
+.theme-dark-void {
+  --background-start-rgb: 5, 5, 10;
+  --background-end-rgb: 0, 0, 0;
+  --accent-primary: #4f46e5;
+  --accent-secondary: #3b82f6;
+}
+
+.theme-high-contrast {
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+  --foreground-rgb: 255, 255, 255;
+  --accent-primary: #00ffff;
+  --accent-secondary: #00ffff;
+  --glass-bg: #000000;
+  --glass-border: #ffffff;
+  --glow-color: transparent;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.theme-neon-pulse {
+  --background-start-rgb: 10, 10, 15;
+  --background-end-rgb: 0, 0, 0;
+  --accent-primary: #8b5cf6;
+  --accent-secondary: #06b6d4;
+  --glow-color: rgba(139, 92, 246, 0.25);
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #000000 100%) fixed;
+  background: radial-gradient(circle at 50% 0%, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%) fixed;
   min-height: 100vh;
   font-family: 'Outfit', sans-serif;
   letter-spacing: -0.01em;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* HIGH CONTRAST OVERRIDES */
+.theme-high-contrast body,
+body.theme-high-contrast {
+  background: #000000 !important;
+}
+
+body.theme-high-contrast * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+}
+
+body.theme-high-contrast .glass,
+body.theme-high-contrast .glass-card {
+  background: #000000 !important;
+  border: 2px solid #ffffff !important;
+}
+
+body.theme-high-contrast button,
+body.theme-high-contrast .btn-primary {
+  background: #00ffff !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
 }
 
 @layer components {
@@ -130,4 +186,14 @@ body {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+/* Autofill Protection */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #1a1b1e inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
